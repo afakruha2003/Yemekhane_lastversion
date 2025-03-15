@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% if kaynak == "yurt" %}
+        {% if user.kullanici_tipi == 'yurt_yetkilisi' %}
+        <a href="{% url 'sehir-dashboard' %}" class="btn btn-primary">Geri Dön</a>
+        <table class="table table-striped">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Oluşturma Tarihi</th>
+                        <th>Özet Tarihi</th>
+                        <th>Özet Türü</th>
+                        <th>Kapsam</th>
+                        <th>Özet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ozet in ozetler %}
+                        <tr>
+                            <td>{{ ozet.olusturma_tarih }}</td>
+                            <td>{{ ozet.ozet_tarih }}</td>
+                            <td>{{ ozet.get_ozet_tur_display }}</td>
+                            <td>{{ ozet.get_kapsam_display }}</td>
+                            <td>{{ ozet.ozet | safe }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </table>
+        {% endif %}
+    <a href="{% url 'sehir-dashboard' %}" class="btn btn-primary">Geri Dön</a>
+    {% elif kaynak == "sehir" %}
+        {% if user.kullanici_tipi == 'sehir_yetkilisi' %}
+        <a href="{% url 'sehir-dashboard' %}" class="btn btn-primary">Geri Dön</a>
+        <table class="table table-striped">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Oluşturma Tarihi</th>
+                        <th>Özet Tarihi</th>
+                        <th>Özet Türü</th>
+                        <th>Kapsam</th>
+                        <th>Özet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ozet in ozetler %}
+                        <tr>
+                            <td>{{ ozet.olusturma_tarih }}</td>
+                            <td>{{ ozet.ozet_tarih }}</td>
+                            <td>{{ ozet.get_ozet_tur_display }}</td>
+                            <td>{{ ozet.get_kapsam_display }}</td>
+                            <td>{{ ozet.ozet | safe }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </table>
+        {% endif %}
+    <a href="{% url 'sehir-dashboard' %}" class="btn btn-primary">Geri Dön</a>
+
+    {% elif kaynak == "turkiye" %}
+        {% if user.kullanici_tipi == 'turkiye_yetkilisi' %}
+    <a href="{% url 'sehir-dashboard' %}" class="btn btn-primary">Geri Dön</a>
+    <table class="table table-striped">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Oluşturma Tarihi</th>
+                    <th>Özet Tarihi</th>
+                    <th>Özet Türü</th>
+                    <th>Kapsam</th>
+                    <th>Özet</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ozet in ozetler %}
+                    <tr>
+                        <td>{{ ozet.olusturma_tarih }}</td>
+                        <td>{{ ozet.ozet_tarih }}</td>
+                        <td>{{ ozet.get_ozet_tur_display }}</td>
+                        <td>{{ ozet.get_kapsam_display }}</td>
+                        <td>{{ ozet.ozet | safe }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </table>
+    {% endif %}
+    {% else %}
+        <p>sen bizi hacklemeye mi çalışıyorsun.</p>
+    {% endif %}
+{% endblock %}

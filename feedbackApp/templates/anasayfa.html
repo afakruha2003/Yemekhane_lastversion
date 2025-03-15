@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block extra_css %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            text-align: center;
+        }
+        main .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        main .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            flex: 1 1 calc(25% - 40px); /* 4 sütun olacak şekilde */
+            min-width: 250px;
+            max-width: 300px;
+            text-align: left;
+        }
+        main .card h3 {
+            margin: 0;
+            background: #f04242;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .meal-list {
+            list-style: none;
+            padding: 0;
+        }
+        .meal-list li {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        @media (max-width: 1024px) {
+            .card {
+                flex: 1 1 calc(33.33% - 40px); /* Orta ekranlarda 3 sütun */
+            }
+        }
+        @media (max-width: 768px) {
+            .card {
+                flex: 1 1 calc(50% - 40px); /* Küçük ekranlarda 2 sütun */
+            }
+        }
+        @media (max-width: 480px) {
+            .card {
+                flex: 1 1 100%; /* Mobilde tam genişlik */
+            }
+        }
+        .meal-box {
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .meal-box h3 {
+            font-size: 1.5em;
+            color: #a11b1a;
+            margin-bottom: 10px;
+        }
+        .meal-box p {
+            font-size: 1.1em;
+            color: #333;
+        }
+        .meal-box .default-text {
+            font-style: italic;
+            color: #888;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #a11b1a;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            margin: 20px auto;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #d52323;
+        }
+        .head-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            height: 250px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        .modal-content button   {
+            background-color: #a11b1a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .modal-content button:hover {
+            background-color: #d52323;
+        }
+    </style>
+    {% endblock %}
+    {% block content %}
+    {% if user.is_authenticated %}
+    <h1>{{ city }} Yemek Listesi</h1>
+    <h2>Bugün: {{ today|date:"d M Y" }}</h2>
+
+    <div class="head-container">
+        <div class="meal-box">
+            <h3>Kahvaltı</h3>
+            {% if kahvalti %}
+                <p>{% if kahvalti.yemek_1 %} {{ kahvalti.yemek_1 }} {% endif %}
+                {% if kahvalti.yemek_2 %} {{ kahvalti.yemek_2 }} {% endif %}
+                {% if kahvalti.yemek_3 %} {{ kahvalti.yemek_3 }} {% endif %}
+                {% if kahvalti.yemek_4 %} {{ kahvalti.yemek_4 }} {% endif %}
+                {% if kahvalti.yemek_5 %} {{ kahvalti.yemek_5 }} {% endif %}
+                {% if kahvalti.yemek_6 %} {{ kahvalti.yemek_6 }} {% endif %}
+                {% if kahvalti.yemek_7 %} {{ kahvalti.yemek_7 }} {% endif %}
+                {% if kahvalti.yemek_8 %} {{ kahvalti.yemek_8 }} {% endif %}
+                {% if kahvalti.yemek_9 %} {{ kahvalti.yemek_9 }} {% endif %}
+                {% if kahvalti.yemek_10 %}{{ kahvalti.yemek_10 }}{% endif %}</p>
+            {% else %}
+                <p class="default-text">Yemek bilgisi yok</p>
+            {% endif %}
+            <button class="cancel-btn btn" onclick="confirmCancel('kahvalti')">Bugün kahvaltı yapmayacağım</button>
+            <div id="confirmation-modal" class="modal">
+                <div class="modal-content">
+                    <p id="modal-text"></p>
+                    <button onclick="closeModal()">Emin misiniz</button>
+                    <button onclick="closeModal()">Iptal</button>
+                </div>
+            </div>
+        </div>
+    
+        <div class="meal-box">
+            <h3>Akşam Yemeği</h3>
+            {% if aksam %}
+             <p>{% if aksam.yemek_1 %} {{ aksam.yemek_1 }} {% endif %}
+                {% if aksam.yemek_2 %} {{ aksam.yemek_2 }} {% endif %}
+                {% if aksam.yemek_3 %} {{ aksam.yemek_3 }} {% endif %}
+                {% if aksam.yemek_4 %} {{ aksam.yemek_4 }} {% endif %}
+                {% if aksam.yemek_5 %} {{ aksam.yemek_5 }} {% endif %}
+                {% if aksam.yemek_6 %} {{ aksam.yemek_6 }} {% endif %}
+                {% if aksam.yemek_7 %} {{ aksam.yemek_7 }} {% endif %}
+                {% if aksam.yemek_8 %} {{ aksam.yemek_8 }} {% endif %}
+                {% if aksam.yemek_9 %} {{ aksam.yemek_9 }} {% endif %}
+                {% if aksam.yemek_10 %}{{ aksam.yemek_10 }}{% endif %}</p>
+            {% else %}
+                <p class="default-text">Yemek bilgisi yok</p>
+            {% endif %}
+            <button class="cancel-btn btn" onclick="confirmCancel('aksam')">Bugün akşam yemeği yemeyeceğim</button>
+            
+        </div>
+    
+        <a href="{% url 'yemek_yorumla' %}" class="btn">Bugünkü Yemekleri Değerlendir</a>
+    </div>
+
+    <h2>Bu Ayın Yemek Listesi</h2>
+
+    <div class="container">
+        {% for tarih, meals in grouped_meals.items %}
+            <div class="card">
+                <h3>{{ tarih|date:"d M Y" }}</h3>
+    
+                {% for meal in meals %}
+                    <h4>{{ meal.ogun }}</h4>
+                    <ul class="meal-list">
+                        {% if meal.yemek_1 %} <li>{{ meal.yemek_1 }}</li> {% endif %}
+                        {% if meal.yemek_2 %} <li>{{ meal.yemek_2 }}</li> {% endif %}
+                        {% if meal.yemek_3 %} <li>{{ meal.yemek_3 }}</li> {% endif %}
+                        {% if meal.yemek_4 %} <li>{{ meal.yemek_4 }}</li> {% endif %}
+                        {% if meal.yemek_5 %} <li>{{ meal.yemek_5 }}</li> {% endif %}
+                        {% if meal.yemek_6 %} <li>{{ meal.yemek_6 }}</li> {% endif %}
+                        {% if meal.yemek_7 %} <li>{{ meal.yemek_7 }}</li> {% endif %}
+                        {% if meal.yemek_8 %} <li>{{ meal.yemek_8 }}</li> {% endif %}
+                        {% if meal.yemek_9 %} <li>{{ meal.yemek_9 }}</li> {% endif %}
+                        {% if meal.yemek_10 %} <li>{{ meal.yemek_10 }}</li> {% endif %}
+                        <li>Çeyrek Ekmek</li>
+                        <li>500 ml Su</li>
+                    </ul>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>Lütfen giriş yapınız.</p>
+    {% endif %}
+    {% endblock content %}
+    {% block script %}
+    <script>
+        function confirmCancel(mealType) {
+            let mealText = mealType === 'kahvalti' ? "Bugün kahvaltı yapmayacaksınız." : "Bugün akşam yemeği yemeyeceksiniz.";
+            document.getElementById("modal-text").innerText = mealText;
+            document.getElementById("confirmation-modal").style.display = "block";
+        }
+    
+        function closeModal() {
+            document.getElementById("confirmation-modal").style.display = "none";
+        }
+    </script>
+    {% endblock %}
+    
+    

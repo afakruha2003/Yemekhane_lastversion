@@ -1,0 +1,91 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    color: #b22222; /* Koyu kırmızı başlıklar */
+    font-weight: bold;
+}
+
+.table {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.table thead th {
+    background-color: #ffca28; /* Sarı başlık arka planı */
+    color: black;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Alternatif satırları farklı renklendir */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fff8e1;
+}
+
+/* Hücreleri ortala */
+.table td, .table th {
+    vertical-align: middle;
+    text-align: center;
+    padding: 12px;
+}
+
+/* Hover efekti ile satır vurgusu */
+.table-hover tbody tr:hover {
+    background-color: #ffecb3;
+}
+.table thead {
+    background-color: #b22222;
+    color: white;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #ffecec; /* Açık kırmızı arka plan */
+}
+
+.table tbody tr:hover {
+    background-color: #f5c6cb; /* Daha koyu kırmızı tonu */
+}
+
+.list-group-item {
+    border-left: 4px solid #b22222;
+    background-color: #fff5f5; /* Hafif kırmızı arka plan */
+}
+
+.text-muted {
+    color: #b22222;
+}
+
+.yorum-ozeti {
+    background-color: #f8f9fa;
+    border-left: 4px solid #8b0000;
+    padding: 15px;
+    margin-top: 15px;
+    font-size: 16px;
+    line-height: 1.6;
+    border-radius: 8px;
+}
+
+.yorum-ozeti h4 {
+    color: #7a0c0c;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.yorum-ozeti ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.yorum-ozeti p {
+    margin-bottom: 5px;
+}

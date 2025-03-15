@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/comments.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Yemek Yorumları</h2>
+
+    {% if kaynak == "profil" %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Şehir</th>
+                <th>Yurt</th>
+                <th>Yemek</th>
+                <th>Yorum</th>
+                <th>Fotoğraf</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for yorum in yorumlar %}
+            <tr>
+                
+                <td>{{ yorum.tarih|date:"d.m.Y H:i" }}</td>
+                <td>{{ yorum.sehir_id.isim }}</td>
+                <td>{{ yorum.yurt }}</td>
+                <td>{{ yorum.yemek }}</td>
+                <td>{{ yorum.yorum }}</td>
+                <td>
+                    {% if yorum.foto %}
+                        <img src="{{ yorum.foto.url }}" alt="Yemek Fotoğrafı" width="100">
+                    {% else %}
+                        Yok
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">Henüz yorum bulunmamaktadır.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'profil' %}" class="btn btn-primary">Geri Dön</a>
+    {% elif kaynak == "yurt" %}
+        {% if user.kullanici_tipi == 'yurt_yetkilisi' %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kullanıcı</th>
+                <th>Yemek</th>
+                <th>Yorum</th>
+                <th>Puan</th>
+                <th>Tarih</th>
+                <th>Şehir</th>
+                <th>Yurt</th>
+                <th>Önem</th>
+                <th>Fotoğraf</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for yorum in yorumlar %}
+            <tr>
+                <td>{{ yorum.user }}</td>
+                <td>{{ yorum.yemek }}</td>
+                <td>{{ yorum.yorum }}</td>
+                <td>{{ yorum.get_yorum_puanı_display }}</td>
+                <td>{{ yorum.tarih|date:"d.m.Y H:i" }}</td>
+                <td>{{ yorum.sehir_id.isim }}</td>
+                <td>{{ yorum.yurt }}</td>
+                <td>{{ yorum.get_yorum_onem_display }}</td>
+                <td>
+                    {% if yorum.foto %}
+                        <img src="{{ yorum.foto.url }}" alt="Yemek Fotoğrafı" width="100">
+                    {% else %}
+                        Yok
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">Henüz yorum bulunmamaktadır.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        {% endif %}
+    <a href="{% url 'sehir-dashboard' %}" class="btn btn-primary">Geri Dön</a>
+    {% elif kaynak == "sehir" %}
+        {% if user.kullanici_tipi == 'sehir_yetkilisi' %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kullanıcı</th>
+                <th>Yemek</th>
+                <th>Yorum</th>
+                <th>Puan</th>
+                <th>Tarih</th>
+                <th>Şehir</th>
+                <th>Yurt</th>
+                <th>Önem</th>
+                <th>Fotoğraf</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for yorum in yorumlar %}
+            <tr>
+                <td>{{ yorum.user }}</td>
+                <td>{{ yorum.yemek }}</td>
+                <td>{{ yorum.yorum }}</td>
+                <td>{{ yorum.get_yorum_puanı_display }}</td>
+                <td>{{ yorum.tarih|date:"d.m.Y H:i" }}</td>
+                <td>{{ yorum.sehir_id.isim }}</td>
+                <td>{{ yorum.yurt }}</td>
+                <td>{{ yorum.get_yorum_onem_display }}</td>
+                <td>
+                    {% if yorum.foto %}
+                        <img src="{{ yorum.foto.url }}" alt="Yemek Fotoğrafı" width="100">
+                    {% else %}
+                        Yok
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">Henüz yorum bulunmamaktadır.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        {% endif %}
+    <a href="{% url 'sehir-dashboard' %}" class="btn btn-primary">Geri Dön</a>
+
+    {% elif kaynak == "turkiye" %}
+        {% if user.kullanici_tipi == 'turkiye_yetkilisi' %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kullanıcı</th>
+                <th>Yemek</th>
+                <th>Yorum</th>
+                <th>Puan</th>
+                <th>Tarih</th>
+                <th>Şehir</th>
+                <th>Yurt</th>
+                <th>Önem</th>
+                <th>Fotoğraf</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for yorum in yorumlar %}
+            <tr>
+                <td>{{ yorum.user }}</td>
+                <td>{{ yorum.yemek }}</td>
+                <td>{{ yorum.yorum }}</td>
+                <td>{{ yorum.get_yorum_puanı_display }}</td>
+                <td>{{ yorum.tarih|date:"d.m.Y H:i" }}</td>
+                <td>{{ yorum.sehir_id.isim }}</td>
+                <td>{{ yorum.yurt }}</td>
+                <td>{{ yorum.get_yorum_onem_display }}</td>
+                <td>
+                    {% if yorum.foto %}
+                        <img src="{{ yorum.foto.url }}" alt="Yemek Fotoğrafı" width="100">
+                    {% else %}
+                        Yok
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">Henüz yorum bulunmamaktadır.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <a href="{% url 'sehir-dashboard' %}" class="btn btn-primary">Geri Dön</a>
+    {% endif %}
+    {% else %}
+        <p>sen bizi hacklemeye mi çalışıyorsun.</p>
+    {% endif %}
+</div>
+{% endblock content %}

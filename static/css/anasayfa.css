@@ -1,0 +1,61 @@
+header {
+    background-color: #a11b1a;
+    color: white;
+    padding: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+}
+
+header div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 80%;
+    margin: auto;
+    gap: 50px; /* Öğeler arasındaki boşluğu artırdık */
+}
+
+header img {
+    width: 120px;
+    height: auto;
+}
+
+header h1 {
+    margin: 0;
+    padding: 10px 0;
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    text-align: center;
+}
+.card h3 {
+    margin: 0;
+    background: #ff6f61;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+.meal-list {
+    list-style: none;
+    padding: 0;
+}
+.meal-list li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 250px; /* Kart genişliği */
+    text-align: left;
+}

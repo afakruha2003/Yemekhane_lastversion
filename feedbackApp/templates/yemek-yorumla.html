@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yurt Yemek Değerlendirme</title>
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+
+
+{% if yemekler %}
+<form id="yemekForm" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for yemek in yemekler %}
+        <div class="yemek">
+            <label for="yorum_{{ forloop.counter }}">
+                {{ yemek }}
+            </label>
+            <textarea
+                name="yorum"
+                class="yorum"
+                placeholder="Yorumunuzu yazın..."
+                data-yemek-isim="{{ yemek }}"
+                id="yorum_{{ forloop.counter }}"
+            ></textarea>
+            <input type="hidden" name="yemek_isim" value="{{ yemek }}">
+            <div class="foto-container" style="display: flex; gap: 10px;">
+                <label for="foto_{{ forloop.counter }}" style="margin: 0;">Fotoğraf Yükle:</label>
+                <input type="file" name="foto_{{ forloop.counter }}" id="foto_{{ forloop.counter }}" accept="image/*">
+            </div>
+        </div>
+    {% endfor %}
+    <button class="gonder" type="submit">Yorumları Gönder</button>
+</form>
+{% else %}
+<p>Bugün için yemekler bulunmamaktadır.</p>
+{% endif %}
+{% endblock content %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".yorum").forEach(yorum => {
+            let index = yorum.id.split("_")[1];  // ID'den index al
+            let fotoInput = document.getElementById(`foto_${index}`);
+            let fotoLabel = document.querySelector(`label[for="foto_${index}"]`);
+
+            if (fotoInput && fotoLabel) {
+                fotoInput.style.opacity = 0; // Başlangıçta gizle
+                fotoInput.style.pointerEvents = "none"; // Fotoğraf inputu geçici olarak devre dışı bırak
+                fotoLabel.style.opacity = 0; // Etiketi de gizle
+                fotoLabel.style.pointerEvents = "none"; // Etiketi geçici olarak devre dışı bırak
+
+                // Yumuşak geçiş için transition ekleyelim
+                fotoInput.style.transition = "opacity 0.3s ease, pointer-events 0s ease 0.3s";
+                fotoLabel.style.transition = "opacity 0.3s ease, pointer-events 0s ease 0.3s";
+
+                yorum.addEventListener("input", function () {
+                    if (this.value.trim().length > 0) {
+                        // Yorum yazıldığında fotoğraf butonu ve etiketi göster
+                        fotoInput.style.opacity = 1;
+                        fotoInput.style.pointerEvents = "auto"; // Fotoğraf inputunu etkinleştir
+                        fotoLabel.style.opacity = 1;
+                        fotoLabel.style.pointerEvents = "auto"; // Etiketi etkinleştir
+                    } else {
+                        // Yorum silindiğinde fotoğraf butonu ve etiketi gizle
+                        fotoInput.style.opacity = 0;
+                        fotoInput.style.pointerEvents = "none"; // Fotoğraf inputunu devre dışı bırak
+                        fotoLabel.style.opacity = 0;
+                        fotoLabel.style.pointerEvents = "none"; // Etiketi devre dışı bırak
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock %}
+    <footer>
+        <p>© 2025 Yurt Yönetimi. Tüm hakları saklıdır.</p>
+    </footer>
+</body>
+</html>

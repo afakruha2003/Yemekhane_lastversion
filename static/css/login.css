@@ -1,0 +1,58 @@
+/* Genel Sayfa Stili */
+body {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    font-family: 'Arial', sans-serif;
+}
+
+/* Giriş Kartı */
+.card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    padding: 20px;
+}
+
+/* Başlık Stili */
+h2 {
+    font-weight: bold;
+    color: #b30000;
+}
+
+/* Form Etiketleri */
+.form-label {
+    font-weight: 600;
+    color: #555;
+}
+
+/* Form Alanları */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+}
+
+/* Buton Stili */
+.btn-danger {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    border: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #ff4757, #ff6b6b);
+    transform: scale(1.05);
+}
+
+/* Hata ve Bilgilendirme Mesajları */
+.alert {
+    border-radius: 8px;
+    font-weight: bold;
+}

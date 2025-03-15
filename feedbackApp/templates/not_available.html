@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yorum Zamanı Değil</title>
+    {% block extra_css %}
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #dc3545;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <div style="margin-top: 30px;">
+            <h1>Yorum Zamanı Değil!</h1>
+            <p>Şu an yemek değerlendirme zamanı dışında olduğunuz için yorum yapamazsınız.</p>
+            <p><strong>Kahvaltı yorumları:</strong> 06:00 - 13:00</p>
+            <p><strong>Akşam yemeği yorumları:</strong> 16:00 - 24:00</p>
+            <p>Lütfen belirtilen saatler arasında tekrar deneyin.</p>
+        </div>
+    </div>
+    
+    {% endblock content %}
+</body>
+</html>

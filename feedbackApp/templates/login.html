@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Giriş Yap{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Giriş Yap</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="username" class="form-label">Kullanıcı Adı</label>
+            {{ form.username }}
+        </div>
+        
+        <div class="mb-3">
+            <label for="password" class="form-label">Şifre</label>
+            {{ form.password }}
+        </div>
+        
+        <button type="submit" class="btn btn-danger">Giriş Yap</button>
+    </form>
+
+    {% if messages %}
+        <div class="alert alert-danger mt-3">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <p>Hesabınız yok mu? <a href="{% url 'register' %}">Kayıt Olun</a></p>
+    </div>
+</div>
+{% endblock %}

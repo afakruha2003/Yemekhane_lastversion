@@ -1,0 +1,219 @@
+/* Genel Stil */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #a11b1a; /* Kırmızı tonları */
+    color: white;
+    padding: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+header div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 80%;
+    margin: auto;
+    gap: 50px;
+}
+
+header img {
+    width: 120px;
+    height: auto;
+}
+
+header h1 {
+    margin: 0;
+    padding: 10px 0;
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+}
+
+/* Sidebar (Yan Menü) */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    right: -250px; /* Başlangıçta gizli olacak */
+    padding-top: 20px;
+    transition: 0.3s;
+    background-color: #a11b1a;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0;
+    transition: 0.3s;
+    font-size: 18px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #d52323; /* Daha koyu kırmızı tonları */
+    border-radius: 5px;
+}
+
+/* Sidebar Açık Olduğunda */
+.sidebar.active {
+    right: 0;
+}
+
+/* Menü Aç/Kapa Butonu */
+.toggle-btn {
+    font-size: 24px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    margin-right: 20px;
+    transition: 0.3s;
+    background-color: #a11b1a;
+    border-radius: 5px;
+}
+
+.toggle-btn:hover {
+    background-color: #d52323; /* Hover efekti için farklı kırmızı */
+}
+
+/* İçerik Alanı */
+.content {
+    padding: 20px;
+    margin-left: 270px; /* Sidebar genişliği kadar margin */
+    margin-top: 20px;
+    text-align: left;
+}
+
+h2 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Kartlar */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px; /* Kart genişliği */
+    margin: 20px;
+    transition: 0.3s;
+    text-align: left;
+}
+
+.card:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+    margin: 0;
+    background: #ff6f61;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Yemek Listesi */
+.meal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.meal-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 18px;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 16px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Düğme Stilleri */
+button {
+    padding: 10px 20px;
+    background-color: #a11b1a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #d52323;
+}
+
+/* Responsive Tasarım */
+@media (max-width: 1024px) {
+    .sidebar {
+        right: 0;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    header div {
+        gap: 20px;
+    }
+
+    header img {
+        width: 100px;
+    }
+
+    .card {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .toggle-btn {
+        font-size: 28px;
+    }
+}

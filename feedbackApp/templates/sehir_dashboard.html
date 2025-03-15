@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <h1>{{ sehir }} Şehir Yetkilisi Paneli</h1>
+
+  <!-- Yorum Özetleri -->
+  <section id="ozetler" class="mb-4">
+    <h3>Yemek Yorum Özetleri</h3>
+    {% if gunluk_ozet or haftalik_ozet or aylik_ozet %}
+      {% if gunluk_ozet %}
+      <div class="alert alert-info">
+        <h4>Günlük Özet ({{ gunluk_ozet.ozet_tarih }})</h4>
+        <p>{{ gunluk_ozet.ozet|safe }}</p>
+      </div>
+      {% endif %}
+      {% if haftalik_ozet %}
+      <div class="alert alert-success">
+        <h4>Haftalık Özet ({{ haftalik_ozet.ozet_tarih }})</h4>
+        <p>{{ haftalik_ozet.ozet|safe }}</p>
+      </div>
+      {% endif %}
+      {% if aylik_ozet %}
+      <div class="alert alert-warning">
+        <h4>Aylık Özet ({{ aylik_ozet.ozet_tarih }})</h4>
+        <p>{{ aylik_ozet.ozet|safe }}</p>
+      </div>
+      {% endif %}
+    {% else %}
+      <p>Bu şehir için henüz özet bulunmamaktadır.</p>
+    {% endif %}
+    <a href="{% url 'ozetler' %}?k=sehir" class="btn btn-secondary">Tüm Şehir Özetlerini Gör</a>
+  </section>
+
+  <!-- Son 10 Yorum -->
+  <section id="son-yorumlar" class="mb-4">
+    <h3>Son 10 Yorum</h3>
+    {% if son_10_yorum %}
+    <div class="list-group">
+      {% for yorum in son_10_yorum %}
+      <a href="#" class="list-group-item list-group-item-action">
+        <h5 class="mb-1">{{ yorum.user }} - {{ yorum.yemek }}</h5>
+        <small class="text-muted">{{ yorum.tarih }}</small>
+        <p class="mb-1">{{ yorum.yorum }}</p>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>Henüz yorum bulunmamaktadır.</p>
+    {% endif %}
+    <a href="{% url 'yorumlar' %}?k=sehir" class="btn btn-secondary">Tüm Şehir Yorumlarını Gör</a>
+  </section>
+
+  <!-- Yurt İstatistikleri -->
+  <section id="yurt-istatistikleri" class="mb-4">
+    <h3>Yurt Memnuniyet Tablosu (Dün)</h3>
+    {% if ortalama_puanlar %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Yurt</th>
+          <th>Ortalama Puan</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for istatistik in ortalama_puanlar_dun %}
+        <tr>
+          <td>{{ istatistik.yurt }}</td>
+          <td>{{ istatistik.ortalama_puan }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>Henüz istatistik verisi bulunmamaktadır.</p>
+    {% endif %}
+    <h3>Yurt Memnuniyet Tablosu (Tüm Zaman)</h3>
+    {% if ortalama_puanlar %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Yurt</th>
+          <th>Ortalama Puan</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for istatistik in ortalama_puanlar %}
+        <tr>
+          <td>{{ istatistik.yurt }}</td>
+          <td>{{ istatistik.ortalama_puan }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>Henüz istatistik verisi bulunmamaktadır.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
