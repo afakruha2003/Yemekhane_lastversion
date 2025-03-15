@@ -88,23 +88,23 @@ gsb_yemekhane_site_copy/
     │── static/  # Statik dosyalar (CSS, JS, resimler vb.)  
     │── templates/  # HTML şablonlarının bulunduğu klasör  
     │   └── feedback/  
-    │       ├── <> admin_login.html
-            ├─anasayfa.html
-            ├─ base.html
-            ├─ login.html
-            ├─ map.html
-            ├─ not_available.html
-            ├─ ozetler.html
-            ├─ profile.html
-            ├─ register.html
-            ├─ sehir_dashboard.html
-            ├─ turkiye_dashboard.html
-            ├─ yemek_guncelle.html
-            ├─ yemek_listesi_panel.html
-            ├─ yemek_listesi_sil.html
-            ├─ yemek-yorumla.html
-            ├─ yorumlar.html
-yurt_dashboard.html 
+    │       ├── admin_login.html
+    │       ├─anasayfa.html
+    │       ├─  base.html
+    │       ├─ login.html
+    │       ├─ map.html
+    │       ├─ not_available.html
+    │       ├─ ozetler.html
+    │       ├─ profile.html
+    │       ├─ register.html
+    │       ├─ sehir_dashboard.html
+    │       ├─ turkiye_dashboard.html 
+    │       ├─ yemek_guncelle.html
+    │       ├─ yemek_listesi_panel.html
+    │       ├─ yemek_listesi_sil.html
+    │       ├─ yemek-yorumla.html
+    │       ├─ yorumlar.html
+    │       ├─ yurt_dashboard.html 
     │  
     │── __init__.py  
     │── admin.py  # Django admin paneli yapılandırması  
