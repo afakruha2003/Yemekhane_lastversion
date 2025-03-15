@@ -7,7 +7,7 @@ import PIL.Image
 
 from feedbackApp.models import Ozet, Sehir, YemekYorumu, Yurt
 
-client = genai.Client(api_key="AIzaSyAibsTR_wCwEp6i4QSChrXIfs2C1Gsvmnw")
+client = genai.Client(api_key="")
 
 bugun = datetime.today().date()
 dun = bugun  - timedelta(days=1)
