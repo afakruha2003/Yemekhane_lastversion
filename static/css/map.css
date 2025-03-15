@@ -1,0 +1,15 @@
+/* Tüm Türkiye haritası şehirlerine uygulanacak genel stil */
+.turkey-map svg g[code] {
+    fill: #ddd; /* Varsayılan dolgu rengi */
+    stroke: #ccc; /* Varsayılan kenarlık rengi */
+    stroke-width: 1; /* Kenarlık kalınlığı */
+  }
+  
+  /* Şehirlerin üzerine gelindiğinde uygulanacak stil */
+  .turkey-map svg g[code]:hover {
+    fill: rgb(219, 26, 26);  /* Kırmızıya dönüştür */
+    stroke: #000; /* Kenarlığı siyah yap */
+    stroke-width: 2; /* Kenarlığı kalınlaştır */
+    cursor: pointer; /* İmleci işaret parmağına dönüştür (isteğe bağlı) */
+  }
+  

@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div>
+    {% include 'map.html' %} 
+
+    <div class="container">
+        <div class="sehir-bilgisi">
+            <h3 id="sehir-adi"></h3>
+        </div>
+        <div id="ozet-container">
+            <!-- Burada şehirle ilgili veriler dinamik olarak görünecek -->
+            <h5>Bilgi almak istediğiniz şehre tıklayınız.</h5>
+        </div>
+        <div>
+            <div id="yurt-container">
+            <!-- Burada yurtla ilgili veriler dinamik olarak görünecek -->
+        </div>
+        </div>
+        <div id="turkiye-ozetler" class="turkiye-ozet-container">
+            {% if gunluk_ozet %}
+                <div class="ozet-section">
+                    <h3>Türkiye Günlük Özet</h3>
+                    <p>Tarih: {{ gunluk_ozet.ozet_tarih}}</p>
+                    <p>{{ gunluk_ozet.ozet| safe }}</p>
+                    
+                </div>
+            {% endif %}
+        
+            {% if haftalik_ozet %}
+                <div class="ozet-section">
+                    <h3>Türkiye Haftalık Özet</h3>
+                    <p>Tarih: {{ haftalik_ozet.ozet_tarih}}</p>
+                    <p>{{ haftalik_ozet.ozet| safe }}</p>
+                </div>
+            {% endif %}
+        
+            {% if aylik_ozet %}
+                <div class="ozet-section">
+                    <h3>Türkiye Aylık Özet</h3>
+                    <p>Tarih: {{ aylik_ozet.ozet_tarih}}</p>
+                    <p>{{ aylik_ozet.ozet| safe }}</p>
+                </div>
+            {% endif %}
+        
+            <div class="turkiye-ozet-footer">
+                <a href="/ozetler/?k=turkiye" class="btn btn-secondary">Tüm Türkiye Özetlerini Gör</a>
+            </div>
+        </div>
+
+        <!-- Son 10 Yorum -->
+    <div class="yorumlar">
+        <div class="form-group">
+            <a href="/yorumlar/?k=yurt" class="btn btn-secondary">Tüm Yorumları Gör</a>
+       </div>
+        <h3>Son 10 Yorum</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Kullanıcı</th>
+                    <th>Yemek</th>
+                    <th>Yorum</th>
+                    <th>Puan</th>
+                    <th>Tarih</th>
+                    <th>Şehir</th>
+                    <th>Yurt</th>
+                    <th>Önem</th>
+                    <th>Fotoğraf</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for yorum in son_10_yorum %}
+                <tr>
+                    <td>{{ yorum.user }}</td>
+                    <td>{{ yorum.yemek }}</td>
+                    <td>{{ yorum.yorum }}</td>
+                    <td>{{ yorum.get_yorum_puanı_display }}</td>
+                    <td>{{ yorum.tarih|date:"d.m.Y H:i" }}</td>
+                    <td>{{ yorum.sehir_id.isim }}</td>
+                    <td>{{ yorum.yurt }}</td>
+                    <td>{{ yorum.get_yorum_onem_display }}</td>
+                    <td>
+                        {% if yorum.foto %}
+                            <img src="{{ yorum.foto.url }}" alt="Yemek Fotoğrafı" width="100">
+                        {% else %}
+                            Yok
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9">Henüz yorum bulunmamaktadır.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+        <h2>Şehirlerin Ortalama Puanları</h2>
+        <table>
+            <tr>
+                <th>Şehir</th>
+                <th>Ortalama Puan</th>
+            </tr>
+            {% for yemek in ortalama_puanlar %}
+            <tr>
+                <td>{{ yemek.sehir_id }}</td>
+                <td>{{ yemek.ortalama_puan|floatformat:2 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">Henüz puanlama yapılmamış.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+    $('.turkey-map svg g[code]').on('click', function(e) {
+        let sehirAdi = $(this).attr('data');
+
+        $('#sehir-adi').text(sehirAdi);
+
+        // Tooltip'i görünür yap
+        $('.sehir-bilgisi').show();
+
+        // Tooltip'in konumunu ayarla (örnek)
+        var x = e.pageX; // Fare imlecinin x koordinatı
+        var y = e.pageY; // Fare imlecinin y koordinatı
+
+        $('.sehir-bilgisi').css({
+            top: y + 10, // Fare imlecinin biraz aşağısında
+            left: x + 10 // Fare imlecinin biraz sağında
+        });
+    });
+});
+
+// Şehir özetlerini al
+$(document).ready(function() {
+    $('#turkiye g').click(function() {
+        var sehirKodu = $(this).attr('code');
+        console.log("Şehir Kodu:", sehirKodu);
+
+        var sehirKoduInt = parseInt(sehirKodu, 10);
+
+        // Özet konteynerini temizle
+        const ozetContainer = document.getElementById("ozet-container");
+        ozetContainer.innerHTML = ''; // Özet konteynerinin içeriğini temizle
+        const yurtContainer = document.getElementById("yurt-container");
+        yurtContainer.innerHTML = '';
+
+        fetch(`/get-sehir/?sehir_kodu=${sehirKoduInt}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) { // Veri var mı kontrolü
+                    data.forEach(veri => {
+                        let ozetDiv = document.createElement("div");
+                        ozetDiv.classList.add("ozet-item");
+
+                        // Markdown'dan gelen HTML içeriğini doğrudan ekle
+                        ozetDiv.innerHTML = `
+                            <p><strong>Şehir ID:</strong> ${veri.sehir_id}</p>
+                            <p><strong>Tarih:</strong> ${veri.ozet_tarih}</p>
+                            <p><strong>Özet Tür:</strong> ${veri.ozet_tur}</p>
+                            <p><strong>Özet:</strong> ${veri.ozet}</p>
+                             <div class="turkiye-ozet-footer">
+                            <a href="/ozetler/?sehir=${veri.sehir_id}" class="btn btn-secondary">Tüm Şehir Özetlerini Gör</a>
+                            </div>
+                            <h3>Yurtlar</h3
+                            <hr>
+                        `;
+
+                        ozetContainer.appendChild(ozetDiv);
+                    });
+                } else {
+                    ozetContainer.innerHTML = "<p>Bu şehir için özet bulunamadı.</p>"; // Veri yoksa mesaj göster
+                }
+            })
+            .catch(error => {
+                console.error("Veri çekme hatası:", error);
+                ozetContainer.innerHTML = "<p>Veri yüklenirken hata oluştu.</p>";
+            });
+
+        fetch(`/get-yurtlar/?sehir_id=${sehirKoduInt}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) { // Veri var mı kontrolü
+                    data.forEach(veri => {
+                        let yurtDiv = document.createElement("div");
+                        yurtDiv.classList.add("ozet-item");
+
+                        // Markdown'dan gelen HTML içeriğini doğrudan ekle
+                        yurtDiv.innerHTML = `
+                            <p><strong> ${veri.isim}</strong></p>
+                            <hr>
+                        `;
+
+                        yurtContainer.appendChild(yurtDiv);
+                    });
+                } else {
+                    yurtContainer.innerHTML = "<p>Bu şehir için yurt bulunamadı.</p>"; // Veri yoksa mesaj göster
+                }
+            })
+            .catch(error => {
+                console.error("Veri çekme hatası:", error);
+                yurtContainer.innerHTML = "<p>Veri yüklenirken hata oluştu.</p>";
+            });
+    });
+});
+
+</script>
+
+{% endblock %}

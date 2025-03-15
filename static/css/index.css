@@ -1,0 +1,106 @@
+/* Genel Sayfa Stilleri */
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.gonder {
+    background-color: white;
+    color: #b80000;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.gonder:hover {
+    background-color: #ffdddd;
+}
+
+/* Ana İçerik Alanı */
+.container {
+    width: 90%;
+    max-width: 650px;
+    margin: 30px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Başlıklar */
+h2 {
+    color: #b80000;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Yemek Değerlendirme Alanı */
+.yemek {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Yorum Alanı */
+.yorum {
+    width: 100%;
+    height: 70px;
+    padding: 10px;
+    border: 2px solid #d0d7e3;
+    border-radius: 5px;
+    font-size: 14px;
+    resize: none;
+    transition: 0.3s;
+}
+
+.yorum:focus {
+    border-color: #b80000;
+    outline: none;
+}
+
+/* Gönder Butonu */
+.gonder button {
+    width: 100%;
+    padding: 12px;
+    background-color: #b80000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.gonder button:hover {
+    background-color: #920000;
+}
+
+/* Footer */
+footer {
+    background-color: #f4f7fc;
+    padding: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+.alert + .alert {
+    display: none;
+}

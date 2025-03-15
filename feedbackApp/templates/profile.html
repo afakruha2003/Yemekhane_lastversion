@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Kullanıcı Profili</h2>
+
+    <form method="post" action="{% url 'profil' %}">
+        {% csrf_token %}
+        
+        <div class="profile-info">
+            <div class="form-group">
+                <label for="username">Kullanıcı Adı</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}">
+
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-Mail</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}">
+            </div>
+            {% if  user.kullanici_tipi != "turkiye_yetkilisi" %}
+            <div class="form-group">
+                <label for="sehir">Şehir</label>
+                <select id="sehir" name="sehir">
+                    {% for sehir in sehirler %}
+                        <option value="{{ sehir.id }}" {% if user.sehir == sehir %}selected{% endif %}>
+                            {{ sehir.isim }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+            {% if user.kullanici_tipi != "sehir_yetkilisi" and user.kullanici_tipi != "turkiye_yetkilisi" %}
+            <div class="form-group">
+                <label for="yurt">Kayıt Olduğu Yurt</label>
+                <select id="yurt" name="yurt">
+                    <option value="">Seçiniz</option>
+                    {% for yurt in yurtlar %}
+                        <option value="{{ yurt.id }}" {% if user.yurt == yurt %}selected{% endif %}>
+                            {{ yurt.isim }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+            
+<br><br>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
+            </div>
+<br>
+            <div class="form-group">
+                <a href="/yorumlar/?k=profil" class="btn btn-secondary">Yorumlarımı Gör</a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}
