@@ -130,4 +130,10 @@ yurt_dashboard.html
     │── urls.py  # Uygulama özelinde URL yönlendirmeleri  
     │── gamini.py  # Özel bir Python betiği  
     └── statistics.py  # İstatistik hesaplamaları için özel betik  
-    └── forms.py  #formların bulunduğu dosya
+        └── forms.py  #formların bulunduğu dosya
+
+-- Günlük Özet Tablosu
+CREATE TABLE IF NOT EXISTS gunluk_ozet (
+    tarih DATE PRIMARY KEY,
+    ozet TEXT
+);
