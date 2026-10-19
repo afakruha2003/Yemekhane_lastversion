@@ -33,27 +33,43 @@ Bu proje, yurtlarda sunulan yemeklerin öğrenciler tarafından değerlendirilme
 
 1.  **Python'ı Yükleyin:** Eğer sisteminizde Python yüklü değilse, [python.org](https://www.python.org/downloads/) adresinden indirin ve kurun.
 
-2.  **Gerekli Kütüphaneleri Kurun:** Proje klasöründe bir sanal ortam oluşturun ve gerekli kütüphaneleri `pip` ile yükleyin:
+2.  **Gerekli Kütüphaneleri Kurun:** Proje klasöründe sanal ortam oluşturup bağımlılıkları kurun:
 
     ```bash
-    python -m venv venv
-    source venv/bin/activate  # Linux/macOS
-    venv\Scripts\activate.bat  # Windows
-    pip install django djangorestframework djangorestframework-simplejwt
-    pip install pandas openpyxl
-    pip install google-generativeai
-    pip install matplotlib seaborn
-    pip install python-dotenv
-    pip install Pillow
-    pip install xlsxwriter```
-
-3.  **Veritabanını Oluşturun:**
-
-    ```bash
-    sqlite3 yemekhane.db < schema.sql #Eğer varsa şemayı buraya ekleyin
+    python -m venv .venv
+    # Linux/macOS
+    source .venv/bin/activate
+    # Windows PowerShell
+    .venv\Scripts\Activate.ps1
+    python -m pip install -r requirements.txt
     ```
 
-4.  **Google Gemini API Anahtarını Ayarlayın:** `app.py` dosyasında `genai.configure(api_key="...")` kısmına Google Gemini API anahtarınızı girin.  API anahtarını [Google AI Studio](https://makersuite.google.com/) adresinden alabilirsiniz.
+3.  **Veritabanını Hazırlayın:**
+
+    ```bash
+    python manage.py migrate
+    ```
+
+    Django, `gsb_yemekhane/settings.py` içinde tanımlı SQLite veritabanını (`db.sqlite3`) kullanır. Bu komut veritabanı tablolarını proje migration'larından oluşturur veya mevcut veritabanını günceller; verileri silmek için veritabanını sıfırlamayın.
+
+4.  **Google Gemini API Anahtarını Ayarlayın (isteğe bağlı):** API anahtarını `GEMINI_API_KEY` ortam değişkeni olarak tanımlayın. Kod ayrıca `GOOGLE_API_KEY` değişkenini de kabul eder. Anahtarı kaynak dosyalarına yazmayın veya Git'e eklemeyin.
+
+    ```bash
+    # Linux/macOS
+    export GEMINI_API_KEY="your-api-key"
+    # Windows PowerShell
+    $env:GEMINI_API_KEY = "your-api-key"
+    ```
+
+    Anahtar tanımlı değilse Django açılır; Gemini işlemleri devre dışı kalır.
+
+    Günlük Gemini işlerini çalıştırmak için web sunucusundan ayrı, tek bir işlem olarak şu komutu başlatın:
+
+    ```bash
+    python manage.py run_scheduler
+    ```
+
+    Zamanlayıcıyı her web worker'ında başlatmayın; aksi takdirde aynı iş birden çok kez çalışabilir.
 
 5.  **Uygulamayı Başlatın:**
 
@@ -114,45 +130,4 @@ yurt_dashboard.html
     │── urls.py  # Uygulama özelinde URL yönlendirmeleri  
     │── gamini.py  # Özel bir Python betiği  
     └── statistics.py  # İstatistik hesaplamaları için özel betik  
-    └── forms.py  #formların bulunduğu dosya 
-
-## Veritabanı Şeması (schema.sql - Örnek)
-
-Veritabanını oluşturmak için kullandığımız şema:
-
-```sql
--- Kullanıcılar tablosu (admin paneli için)
-CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
-);
-
--- Yemek Listesi Tablosu
-CREATE TABLE IF NOT EXISTS Yemek_Listesi (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    tarih DATE NOT NULL,
-    ogun TEXT NOT NULL,
-    yemek_1 TEXT,
-    yemek_2 TEXT,
-    yemek_3 TEXT,
-    yemek_4 TEXT,
-    yemek_5 TEXT,
-    yemek_6 TEXT,
-    yemek_7 TEXT,
-    yemek_8 TEXT
-);
-
--- Yemek Yorumları Tablosu
-CREATE TABLE IF NOT EXISTS Yemek_Yorumlari (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    tarih DATE NOT NULL,
-    yemek_ismi TEXT NOT NULL,
-    yorum TEXT
-);
-
--- Günlük Özet Tablosu
-CREATE TABLE IF NOT EXISTS gunluk_ozet (
-    tarih DATE PRIMARY KEY,
-    ozet TEXT
-);
+    └── forms.py  #formların bulunduğu dosya

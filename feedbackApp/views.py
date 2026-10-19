@@ -8,9 +8,7 @@ from django.utils.timezone import now
 from django.http import HttpResponse
 from django.views import View
 from .statistics import sehir_istatistik, yurt_istatistik
-import google.generativeai as genai
 import markdown
-import markupsafe
 from feedbackApp.gemini import do_everything, sehir_yorum_ozetle, turkiye_yorum_ozetle, yorum_puanla, yurt_yorum_ozetle
 from feedbackApp.statistics import sehir_istatistik, yemek_istatistik
 from .models import Ozet, YemekYorumu, CustomUser,YemekListesiGuncelleme, Sehir, Yurt, Yemek,YemekListesi
@@ -604,4 +602,3 @@ def get_sehir(request):
             ozet['ozet'] = markdown.markdown(ozet['ozet'])  # Markdown'dan HTML'ye dönüşüm
         return JsonResponse(list(ozetler), safe=False)
     return JsonResponse([], safe=False)
-
