@@ -1,7 +1,5 @@
 import schedule
-import threading
 import time
-from datetime import datetime
 from feedbackApp.gemini import do_everything
 
 

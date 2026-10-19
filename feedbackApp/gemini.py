@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta,date
 import json
+import logging
+import os
 from google import genai
 from google.genai import types
 from django.utils.timezone import now
@@ -7,7 +9,17 @@ import PIL.Image
 
 from feedbackApp.models import Ozet, Sehir, YemekYorumu, Yurt
 
-client = genai.Client(api_key="")
+logger = logging.getLogger(__name__)
+api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+client = genai.Client(api_key=api_key) if api_key else None
+
+
+def _generate_content(**kwargs):
+    if client is None:
+        raise RuntimeError(
+            "Gemini integration is disabled. Set GEMINI_API_KEY (or GOOGLE_API_KEY) to enable it."
+        )
+    return client.models.generate_content(**kwargs)
 
 bugun = datetime.today().date()
 dun = bugun  - timedelta(days=1)
@@ -50,7 +62,7 @@ def yurt_yorum_ozetle():
 
         if not Ozet.objects.filter(ozet_tarih=dun, yurt=yurt.isim).exists():
             try:
-                response = client.models.generate_content(
+                response = _generate_content(
                     model="gemini-2.0-flash",
                     config=types.GenerateContentConfig(
                         system_instruction=sys_instruct),
@@ -106,7 +118,7 @@ def yurt_yorum_ozetle_haftalik():
 
         if not Ozet.objects.filter(ozet_tarih=dun, yurt=yurt.isim, ozet_tur="haftalık").exists():
             try:
-                response = client.models.generate_content(
+                response = _generate_content(
                     model="gemini-2.0-flash",
                     config=types.GenerateContentConfig(
                         system_instruction=sys_instruct),
@@ -162,7 +174,7 @@ def yurt_yorum_ozetle_aylik():
 
         if not Ozet.objects.filter(ozet_tarih=dun, yurt=yurt.isim, kapsam= "yurt", ozet_tur="aylık").exists():
             try:
-                response = client.models.generate_content(
+                response = _generate_content(
                     model="gemini-2.0-flash",
                     config=types.GenerateContentConfig(
                         system_instruction=sys_instruct),
@@ -218,7 +230,7 @@ def sehir_yorum_ozetle():
             continue
         
         try:
-            response = client.models.generate_content(
+            response = _generate_content(
                 model="gemini-2.0-flash",
                 config=types.GenerateContentConfig(
                     system_instruction=sys_instruct),
@@ -272,7 +284,7 @@ def sehir_yorum_ozetle_haftalik():
             continue
         
         try:
-            response = client.models.generate_content(
+            response = _generate_content(
                 model="gemini-2.0-flash",
                 config=types.GenerateContentConfig(
                     system_instruction=sys_instruct),
@@ -325,7 +337,7 @@ def sehir_yorum_ozetle_aylik():
             continue
         
         try:
-            response = client.models.generate_content(
+            response = _generate_content(
                 model="gemini-2.0-flash",
                 config=types.GenerateContentConfig(
                     system_instruction=sys_instruct),
@@ -378,7 +390,7 @@ def turkiye_yorum_ozetle():
         return
     
     try:
-        response = client.models.generate_content(
+        response = _generate_content(
             model="gemini-2.0-flash",
             config=types.GenerateContentConfig(
                 system_instruction=sys_instruct),
@@ -426,7 +438,7 @@ def turkiye_yorum_ozetle_haftalik():
         return
     
     try:
-        response = client.models.generate_content(
+        response = _generate_content(
             model="gemini-2.0-flash",
             config=types.GenerateContentConfig(
                 system_instruction=sys_instruct),
@@ -474,7 +486,7 @@ def turkiye_yorum_ozetle_aylik():
         return
     
     try:
-        response = client.models.generate_content(
+        response = _generate_content(
             model="gemini-2.0-flash",
             config=types.GenerateContentConfig(
                 system_instruction=sys_instruct),
@@ -523,7 +535,7 @@ def goruntu_yorumla():
         image = PIL.Image.open(yorum.foto)
         prompt = "yemek: " + yorum.yemek + "yorum: " + yorum.yorum
 
-        gemini_response = client.models.generate_content(
+        gemini_response = _generate_content(
         model="gemini-2.0-flash",
         config=types.GenerateContentConfig(
             system_instruction=sys_instruct),
@@ -620,7 +632,7 @@ def yorum_puanla():
 
     prompt = json.dumps({"yorumlar": yorum_listesi}, ensure_ascii=False)
 
-    gemini_response = client.models.generate_content(
+    gemini_response = _generate_content(
     model="gemini-2.0-flash",
     config=types.GenerateContentConfig(
         system_instruction=sys_instruct),
@@ -655,10 +667,14 @@ def yorum_puanla():
     return "Yorum puanlama tamamlandı."
 
 def do_everything():
+    if client is None:
+        logger.warning(
+            "Skipping scheduled Gemini processing because GEMINI_API_KEY is not configured."
+        )
+        return
     goruntu_yorumla()
     yorum_puanla()
     yurt_yorum_ozetle()
     sehir_yorum_ozetle()
     turkiye_yorum_ozetle()
-
 
